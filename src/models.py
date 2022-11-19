@@ -28,7 +28,7 @@ import enum
 
 Base = declarative_base()
 
-class Media_enum(enum.enum):
+class Media_enum(enum.Enum):
     imagen = "imagen",
     video = "video"
 
@@ -36,7 +36,7 @@ class Media_enum(enum.enum):
 class User(Base):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
-    user_name = Column(String(250),primary_key=True)
+    user = Column(String(250),primary_key=True)
     name = Column(String(250))
     pasword = Column(String(250))
     email = Column(String(250))
@@ -45,45 +45,46 @@ class User(Base):
 class Followers (Base):
     __tablename__ = 'followers'
     id = Column(Integer, primary_key=True)
-    name = Column(String(250))
-    user_from = Column(String(250))
-    user_to  = Column(String(250))
-    post_id = Column(Integer, ForeignKey('post.id'))
-    user_id = Column(Integer, ForeignKey('user.id'))
-    media_id = Column(Integer, ForeignKey('media.id'))
+    user_from = Column(String(250),primary_key=True)
+    user_to  = Column(String(250),primary_key=True)
+    user_from_id = Column(Integer, ForeignKey('user.id'))
+    user_to_id = Column(Integer, ForeignKey('user.id'))
     followers = relationship("user")
 
 
 class Post (Base):
     __tablename__ = 'post'
     id = Column(Integer, primary_key=True)
-    user_id =Column(String(250)),ForeignKey('user.id')
+    user =  Column(String(250),primary_key=True)
+    media_id =Column(String(250)),ForeignKey('media.id')
+    comment_id =Column(String(250)),ForeignKey('comment.id')
+    post_id =Column(String(250)),ForeignKey('post.id')
     date = Column(String(250))
     text = Column(String(250))
     media = Column(String(250))
-    followers_id = Column(Integer, ForeignKey('followers.id'))
     post = relationship("user")
     post = relationship("media")
+    post = relationship("comment")
  
 class Comment (Base):
     __tablename__ = 'comment'
     id = Column(Integer, primary_key=True)
-    post_id = Column(Integer, ForeignKey('media.id'))
-    user_id = Column(Integer, ForeignKey('user.id'))
+    author = Column(String(250),primary_key=True)
+    post_id = Column(Integer, ForeignKey('post.id'))
+    author_id = Column(Integer, ForeignKey('author.id'))
+    
     comment = Column(String(250))
     comment = relationship("user")
-    comment = relationship("media")
+    comment = relationship("post")
 
 
 class Media (Base):
     __tablename__ = 'media'
     id = Column(Integer, primary_key=True)
     type = Column(String(250))
-    url = Column(EnumString(250))
+    url = Column(String(250))
     post_id = Column(Integer, ForeignKey('post.id'))
-    user_id = Column(Integer, ForeignKey('user.id'))
     media = Column(String(250))
-    media = relationship("user")
     media = relationship("post")
 
     def to_dict(self):
