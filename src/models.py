@@ -68,11 +68,9 @@ class Post (Base):
  
 class Comment (Base):
     __tablename__ = 'comment'
-    id = Column(Integer, primary_key=True)
-    author = Column(String(250),primary_key=True)
+    id = Column(Integer, primary_key=True)                
     post_id = Column(Integer, ForeignKey('post.id'))
     author_id = Column(Integer, ForeignKey('author.id'))
-    
     comment = Column(String(250))
     comment = relationship("user")
     comment = relationship("post")
