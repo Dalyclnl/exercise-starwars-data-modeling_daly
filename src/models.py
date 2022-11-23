@@ -55,11 +55,9 @@ class Comment (Base):
     id = Column(Integer, primary_key=True) 
     author_id = Column(Integer, ForeignKey('author.id'))
     user_id = Column(Integer, ForeignKey('user.id'))
-    post_id = Column(Integer, ForeignKey('post.id'))
     comment = Column(String(250))
     created = Column(String(250))
     comment = relationship("user")
-    comment = relationship("post")
 
 class Media (Base):
     __tablename__ = 'media'
@@ -74,14 +72,13 @@ class Post (Base):
     __tablename__ = 'post'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))  
-    media_id =Column(Integer,ForeignKey('media.id'))
     comment_id =Column(Integer,ForeignKey('comment.id'))
     date = Column(String(250))
     text = Column(String(250))
     media = Column(String(250))
     post = relationship("user")
     post = relationship("comment")
-    post = relationship("media")
+  
 
 
     def to_dict(self):
